@@ -22,6 +22,10 @@ class HomeFragment: Fragment(), OnItemClick {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        binding.addPostButton.setOnClickListener{
+            findNavController().navigate(HomeFragmentDirections.actionHomeToNewPost())
+        }
         initRecyclerView()
         return binding.root;
     }
