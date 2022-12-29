@@ -4,7 +4,6 @@
         android:id="@+id/home"
         android:icon="@drawable/ic_home"
         android:title="@string/home" />
-
     <item
         android:id="@+id/chats"
         android:icon="@drawable/ic_chat"

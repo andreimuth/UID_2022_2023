@@ -50,4 +50,32 @@
         android:name="com.example.project.NewPostFragment"
         tools:layout="@layout/fragment_new_post"/>
 
+    <fragment
+        android:id="@+id/groupFeed"
+        android:name="com.example.project.GroupFeedFragment"
+        tools:layout="@layout/fragment_group_feed">
+        <action
+            android:id="@+id/action_group_feed_to_new_post"
+            app:destination="@id/newPost"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"/>
+
+        <action
+            android:id="@+id/action_group_feed_to_postDetails"
+            app:destination="@id/postDetails"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/approvePosts"
+        android:name="com.example.project.ApprovePostsFragment"
+        tools:layout="@layout/fragment_approve_posts">
+        <action
+            android:id="@+id/action_approvePosts_to_postDetails"
+            app:destination="@id/postDetails"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"/>
+    </fragment>
+
 </navigation>

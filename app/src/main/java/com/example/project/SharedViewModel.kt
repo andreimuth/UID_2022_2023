@@ -1,14 +1,20 @@
 package com.example.project
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.project.models.Comment
+import com.example.project.models.Flag
 import com.example.project.models.Post
+import com.example.project.models.PostType
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class SharedViewModel : ViewModel() {
     // TODO : Add mocked data for each part of the app
 
     val feedPosts: MutableList<Post> = (0..20).map {
-        Post(it,
+        Post(
+            it,
             0,
             "Username $it",
             "Date $it",
@@ -21,12 +27,30 @@ class SharedViewModel : ViewModel() {
                     "date $commentNr",
                     "comment nr $commentNr"
                 )
-            }.toMutableList())
+            }.toMutableList(),
+            Flag.NONE,
+            PostType.POST
+        )
     }.toMutableList()
+
+    private val postsStateFlow: MutableStateFlow<List<Post>> = MutableStateFlow(feedPosts)
+    val postsFlow = postsStateFlow.asStateFlow()
 
 
     fun addComment(postId: Int, comment: Comment) {
-        feedPosts[postId].comments.add(comment)
+        postsStateFlow.value = postsStateFlow.value.map { post ->
+            if (post.id == postId) {
+                post.copy(comments = post.comments.apply { add(comment) })
+            } else {
+                post
+            }
+        }.toMutableList()
+
+     //   feedPosts[postId].comments.add(comment)
+    }
+
+    fun filterPosts(filter: PostType) {
+        postsStateFlow.value = feedPosts.filter { it.type == filter }
     }
 
 }

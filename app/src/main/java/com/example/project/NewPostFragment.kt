@@ -9,7 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.project.databinding.FragmentNewPostBinding
 
-class NewPostFragment: Fragment() {
+class NewPostFragment : Fragment() {
 
     private lateinit var binding: FragmentNewPostBinding
     private val viewModel: SharedViewModel by viewModels()
@@ -21,9 +21,16 @@ class NewPostFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentNewPostBinding.inflate(inflater, container, false)
-        binding.closeButton.setOnClickListener{
+        initClickListeners()
+        return binding.root
+    }
+
+    private fun initClickListeners() {
+        binding.postButton.setOnClickListener {
             findNavController().navigateUp()
         }
-        return binding.root
+        binding.closeButton.setOnClickListener {
+            findNavController().navigateUp()
+        }
     }
 }

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_marginBottom="?android:attr/actionBarSize">
 
-    <androidx.appcompat.widget.Toolbar
+    <Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,8 +18,8 @@
             android:id="@+id/back_button"
             android:src="@drawable/ic_back"
             android:layout_gravity="start|center_vertical"
-            android:layout_width="30dp"
-            android:layout_height="30dp"/>
+            android:layout_width="20dp"
+            android:layout_height="20dp"/>
         
         <TextView
             android:id="@+id/post_details_title"
@@ -33,13 +33,13 @@
 
         <ImageView
             android:id="@+id/report_button"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_gravity="end|center_vertical"
             android:layout_marginHorizontal="20dp"
             android:src="@drawable/ic_report"/>
 
-    </androidx.appcompat.widget.Toolbar>
+    </Toolbar>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/post"

@@ -6,12 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.project.databinding.FragmentPostDetailsBinding
 import com.example.project.models.Comment
 
-class PostDetailsFragment: Fragment() {
+class PostDetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentPostDetailsBinding
     private val viewModel: SharedViewModel by viewModels()
@@ -26,6 +27,7 @@ class PostDetailsFragment: Fragment() {
     ): View {
         binding = FragmentPostDetailsBinding.inflate(inflater, container, false)
 
+        initClickListeners()
         initRecyclerView()
 
         return binding.root
@@ -39,9 +41,12 @@ class PostDetailsFragment: Fragment() {
         binding.date.text = post.dateCreated
         binding.username.text = post.username
 
-        binding.postCommentButton.setOnClickListener{
+        binding.postCommentButton.setOnClickListener {
             val comment = binding.commentInputText.text.toString()
-            viewModel.addComment(post.id, Comment(post.comments.size + 1 , 0,"username","date",comment))
+            viewModel.addComment(
+                post.id,
+                Comment(post.comments.size + 1, 0, "username", "date", comment)
+            )
             binding.commentInputText.text.clear()
             myAdapter.notifyItemInserted(post.comments.size + 1)
         }
@@ -54,4 +59,11 @@ class PostDetailsFragment: Fragment() {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         }
     }
+
+    private fun initClickListeners() {
+        binding.backButton.setOnClickListener {
+            findNavController().navigateUp()
+        }
+    }
+
 }
