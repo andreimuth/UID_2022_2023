@@ -7,18 +7,22 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.databinding.FragmentGroupFeedBinding
 import com.example.project.models.PostType
+import kotlinx.coroutines.launch
 
 class GroupFeedFragment: Fragment(), OnItemClick, PopupMenu.OnMenuItemClickListener {
 
     private lateinit var binding: FragmentGroupFeedBinding
-    private val viewModel: SharedViewModel by viewModels()
+    private val viewModel: SharedViewModel by activityViewModels()
     private val groupFeedAdapter: HomeFeedAdapter by lazy { HomeFeedAdapter(viewModel.postsFlow.value, this) }
 
     override fun onCreateView(
@@ -35,7 +39,7 @@ class GroupFeedFragment: Fragment(), OnItemClick, PopupMenu.OnMenuItemClickListe
     private fun initRecyclerView() {
         binding.homeRecyclerView.apply {
             adapter = groupFeedAdapter
-            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL,true)
+            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL,false)
         }
     }
 
@@ -60,6 +64,28 @@ class GroupFeedFragment: Fragment(), OnItemClick, PopupMenu.OnMenuItemClickListe
                 binding.filterButton.visibility= View.VISIBLE
             }
         }
+
+        binding.searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                if(p0 != null) {
+                    viewModel.filterByKeyword(p0)
+                }
+                return false
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean {
+                if(p0 != null) {
+                    viewModel.filterByKeyword(p0)
+                }
+                return false
+            }
+        })
+
+        lifecycleScope.launch {
+            viewModel.postsFlow.collect { posts ->
+                groupFeedAdapter.submitList(posts)
+            }
+        }
     }
 
     private fun showMenu(v: View) {
@@ -74,13 +100,10 @@ class GroupFeedFragment: Fragment(), OnItemClick, PopupMenu.OnMenuItemClickListe
         return when (item.itemId) {
             R.id.posts_item -> {
                 viewModel.filterPosts(PostType.POST)
-                groupFeedAdapter.notifyDataSetChanged()
-                Log.d("MYTAG",viewModel.postsFlow.value.toString())
                 true
             }
             R.id.announcements_item -> {
                 viewModel.filterPosts(PostType.ANNOUNCEMENT)
-                groupFeedAdapter.notifyDataSetChanged()
                 true
             }
             else -> false
@@ -88,7 +111,7 @@ class GroupFeedFragment: Fragment(), OnItemClick, PopupMenu.OnMenuItemClickListe
     }
 
 
-    override fun onItemClick(position: Int, v: View) {
+    override fun onItemClick(position: Int, v: View,v2: View?) {
         val selectedPost = viewModel.feedPosts[position]
         findNavController().navigate(GroupFeedFragmentDirections.actionGroupFeedToPostDetails(selectedPost.id.toString()))
     }
@@ -96,5 +119,4 @@ class GroupFeedFragment: Fragment(), OnItemClick, PopupMenu.OnMenuItemClickListe
     override fun onItemLongClick(position: Int, v: View) {
         TODO("Not yet implemented")
     }
-
 }

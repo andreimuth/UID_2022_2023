@@ -21,8 +21,8 @@ class ApprovePostsAdapter(private val dataSource: List<Post>, val onItemClick: O
         holder.username.text = dataSource[position].username
         holder.date.text = dataSource[position].dateCreated
         holder.postText.text = dataSource[position].text
-        holder.itemView.setOnClickListener{
-            onItemClick.onItemClick(position, it)
+        holder.menuButton.setOnClickListener{
+            onItemClick.onItemClick(position, holder.itemView,it)
         }
     }
 
@@ -35,7 +35,6 @@ class ApprovePostsAdapter(private val dataSource: List<Post>, val onItemClick: O
         val username: TextView = binding.username
         val date: TextView = binding.date
         val postText: TextView = binding.text
-        val moreButton: ImageView = binding.moreButton
         val menuButton: ImageView = binding.menuButton
     }
 

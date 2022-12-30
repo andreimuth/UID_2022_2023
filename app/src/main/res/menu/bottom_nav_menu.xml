@@ -5,12 +5,12 @@
         android:icon="@drawable/ic_home"
         android:title="@string/home" />
     <item
-        android:id="@+id/chats"
+        android:id="@+id/approvePosts"
         android:icon="@drawable/ic_chat"
         android:title="@string/chats" />
 
     <item
-        android:id="@+id/groups"
+        android:id="@+id/groupFeed"
         android:icon="@drawable/ic_group"
         android:title="@string/groups" />
 

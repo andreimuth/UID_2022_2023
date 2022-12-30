@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.project.databinding.FeedItemBinding
 import com.example.project.models.Post
 
-class HomeFeedAdapter(private val dataSource: List<Post>, val onItemClick: OnItemClick):
+class HomeFeedAdapter(private var dataSource: List<Post>, val onItemClick: OnItemClick):
     RecyclerView.Adapter<HomeFeedAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -31,6 +31,12 @@ class HomeFeedAdapter(private val dataSource: List<Post>, val onItemClick: OnIte
         return dataSource.size
     }
 
+    fun submitList(posts: List<Post>) {
+        dataSource = posts
+        notifyDataSetChanged()
+
+    }
+
     class ViewHolder(binding: FeedItemBinding) : RecyclerView.ViewHolder(binding.root) {
         val userIcon: ImageView = binding.userIcon
         val username: TextView = binding.username
@@ -42,6 +48,6 @@ class HomeFeedAdapter(private val dataSource: List<Post>, val onItemClick: OnIte
 }
 
 interface OnItemClick {
-    fun onItemClick(position:Int, v: View)
+    fun onItemClick(position:Int, v: View, v2:View? = null)
     fun onItemLongClick(position:Int, v: View)
 }
