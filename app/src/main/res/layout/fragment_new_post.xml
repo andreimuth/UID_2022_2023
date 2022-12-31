@@ -6,12 +6,26 @@
 
     <Toolbar
         android:id="@+id/toolbar"
-        android:title="New Post"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/title_toggle_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            app:backgroundTint="@android:color/transparent"
+            android:text="New Post"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            app:icon="@drawable/ic_down"
+            app:iconTint="@color/white"
+            app:iconGravity="start" />
 
         <ImageView
             android:id="@+id/close_button"

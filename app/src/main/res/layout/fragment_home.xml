@@ -40,6 +40,32 @@
             android:layout_marginHorizontal="5dp"/>
     </Toolbar>
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/go_to_approve_posts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:paddingHorizontal="10dp"
+            android:layout_gravity="start|center_vertical"
+            android:text="Go to approve posts"
+            android:textSize="15sp"/>
+        <ImageView
+            android:id="@+id/go_to_approve_posts_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_details"
+            android:layout_gravity="end|center_vertical"
+            android:layout_margin="5dp"/>
+    </androidx.cardview.widget.CardView>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/homeRecyclerView"
         android:layout_width="match_parent"
@@ -47,7 +73,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintTop_toBottomOf="@id/go_to_approve_posts"
         tools:listitem="@layout/feed_item"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

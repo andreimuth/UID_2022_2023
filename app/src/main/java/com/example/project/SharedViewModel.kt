@@ -46,6 +46,8 @@ class SharedViewModel : ViewModel() {
         posts.add(post)
         postsStateFlow.value = posts
         feedPosts = feedPosts + post
+
+        removePost(post)
     }
 
     fun addPost(post:Post) {
@@ -68,13 +70,19 @@ class SharedViewModel : ViewModel() {
             }
         }.toMutableList()
 
-     //   feedPosts[postId].comments.add(comment)
+        feedPosts[postId].comments.add(comment)
     }
 
-    fun filterPosts(filter: PostType) {
-        postsStateFlow.value = feedPosts.filter { post ->
-            post.type == filter
-        }.toMutableList()
+    fun flagPost(position: Int, flag: Flag) {
+       postsToApproveStateFlow.value[position].flag = flag
+    }
+
+    fun filterPosts(filter: PostType?) {
+        if(filter == null) {
+            postsStateFlow.value = feedPosts
+        } else {
+            postsStateFlow.value = feedPosts.filter { it.type == filter }
+        }
     }
 
     fun filterByKeyword(keyword: String) {

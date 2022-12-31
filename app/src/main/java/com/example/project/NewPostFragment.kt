@@ -1,5 +1,6 @@
 package com.example.project
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,7 +29,15 @@ class NewPostFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     private fun initClickListeners() {
+        binding.titleToggleButton.setOnClickListener{
+            if(binding.titleToggleButton.text == "New Post"){
+               binding.titleToggleButton.text = "New Announcement"
+            } else {
+                binding.titleToggleButton.text = "New Post"
+            }
+        }
         binding.postButton.setOnClickListener {
             viewModel.addPost(
                 Post(

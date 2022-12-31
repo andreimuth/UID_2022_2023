@@ -1,5 +1,9 @@
 package com.example.project
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -12,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.project.databinding.FragmentHomeBinding
 import com.example.project.models.PostType
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.activityViewModels
 import kotlinx.coroutines.launch
 
@@ -43,11 +49,40 @@ class HomeFragment : Fragment(), OnItemClick, PopupMenu.OnMenuItemClickListener 
             adapter = homeFeedAdapter
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         }
+        createNotificationChannel()
+    }
+
+
+    private fun createNotificationChannel() {
+        val channelId = "all_notifications"
+        val mChannel = NotificationChannel(
+            channelId,
+            "General Notifications",
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
+        mChannel.description = "This is default channel used for all other notifications"
+
+        val notificationManager = (activity as MainActivity).applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(mChannel)
+
+        val builder = NotificationCompat.Builder((activity as MainActivity).applicationContext, channelId)
+            .setSmallIcon(R.drawable.ic_important)
+            .setContentTitle("See what you have missed!")
+            .setContentText("You have new posts!")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+
+        with(NotificationManagerCompat.from((activity as MainActivity).applicationContext)) {
+            notify(1222, builder.build())
+        }
     }
 
     private fun initClickListeners() {
         binding.addPostButton.setOnClickListener {
             findNavController().navigate(HomeFragmentDirections.actionHomeToNewPost())
+        }
+        binding.goToApprovePostsButton.setOnClickListener{
+            findNavController().navigate(HomeFragmentDirections.actionHomeToApprovePosts())
         }
 
         binding.filterButton.setOnClickListener {
@@ -103,6 +138,10 @@ class HomeFragment : Fragment(), OnItemClick, PopupMenu.OnMenuItemClickListener 
             }
             R.id.announcements_item -> {
                 viewModel.filterPosts(PostType.ANNOUNCEMENT)
+                true
+            }
+            R.id.all_item -> {
+                viewModel.filterPosts(null)
                 true
             }
             else -> false

@@ -106,6 +106,10 @@ class GroupFeedFragment: Fragment(), OnItemClick, PopupMenu.OnMenuItemClickListe
                 viewModel.filterPosts(PostType.ANNOUNCEMENT)
                 true
             }
+            R.id.all_item -> {
+                viewModel.filterPosts(null)
+                true
+            }
             else -> false
         }
     }

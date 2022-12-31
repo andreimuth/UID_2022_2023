@@ -1,6 +1,9 @@
 package com.example.project
 
+import android.graphics.Color
 import android.graphics.ColorFilter
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +18,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.project.databinding.FragmentPostDetailsBinding
 import com.example.project.models.Comment
+import com.example.project.models.Flag
 
 class PostDetailsFragment : Fragment() {
 
@@ -45,7 +49,14 @@ class PostDetailsFragment : Fragment() {
         binding.date.text = post.dateCreated
         binding.username.text = post.username
 
-        binding.postCommentButton.setOnClickListener {
+        if(post.flag != Flag.NONE) {
+            if(post.flag == Flag.IMPORTANT)
+                binding.flagIcon.setImageResource(R.drawable.ic_important)
+            else
+                binding.flagIcon.setImageResource(R.drawable.ic_trivial)
+        }
+
+        binding.postCommentButton.setOnClickListener{
             val comment = binding.commentInputText.text.toString()
             viewModel.addComment(
                 post.id,
@@ -55,15 +66,15 @@ class PostDetailsFragment : Fragment() {
             myAdapter.notifyItemInserted(post.comments.size + 1)
         }
 
-        binding.likeButton.setOnClickListener { // TODO: FIX THIS , IT DOES NOT WORK
-            Log.d("MYTAG",binding.likeButton.solidColor.toString())
-            Log.d("MYTAG",resources.getColor(R.color.purple_200).toString())
-            Log.d("MYTAG",R.color.purple_200.toString())
+        binding.likeButton.colorFilter = PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
 
-            if (binding.likeButton.solidColor== resources.getColor(R.color.purple_200))
-                binding.likeButton.setColorFilter(resources.getColor(R.color.white))
+        binding.likeButton.setOnClickListener {
+            val color = PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
+            val colorClicked = PorterDuffColorFilter(Color.rgb(187, 134, 252), PorterDuff.Mode.SRC_ATOP)
+            if(binding.likeButton.colorFilter == color)
+                binding.likeButton.colorFilter = colorClicked
             else
-                binding.likeButton.setColorFilter(resources.getColor(R.color.purple_200))
+                binding.likeButton.colorFilter = color
         }
     }
 

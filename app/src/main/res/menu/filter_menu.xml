@@ -9,5 +9,9 @@
         android:id="@+id/announcements_item"
         android:title="Announcements"/>
 
+    <item
+        android:id="@+id/all_item"
+        android:title="All" />
+
 
 </menu>

@@ -1,20 +1,20 @@
 package com.example.project
 
+import android.app.ProgressDialog.show
 import android.os.Bundle
+import android.util.Log
 import android.view.*
-import android.widget.AdapterView
 import android.widget.PopupMenu
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.databinding.FragmentApprovePostsBinding
-import com.example.project.models.PostType
+import com.example.project.models.Flag
 
-class ApprovePostsFragment: Fragment() ,OnItemClick, PopupMenu.OnMenuItemClickListener {
+class ApprovePostsFragment: Fragment() ,OnItemClick {
 
     private lateinit var binding: FragmentApprovePostsBinding
     private val viewModel: SharedViewModel by activityViewModels()
@@ -28,7 +28,7 @@ class ApprovePostsFragment: Fragment() ,OnItemClick, PopupMenu.OnMenuItemClickLi
         binding = FragmentApprovePostsBinding.inflate(inflater, container, false)
         initClickListeners()
         initRecyclerView()
-        return binding.root;
+        return binding.root
     }
 
     private fun initRecyclerView() {
@@ -62,33 +62,53 @@ class ApprovePostsFragment: Fragment() ,OnItemClick, PopupMenu.OnMenuItemClickLi
     }
 
 
-    private fun showMenu(v: View) {
+    private fun showMenu(v: View,position: Int) {
         PopupMenu(context, v).apply {
-            setOnMenuItemClickListener(this@ApprovePostsFragment)
+            setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.approve_post_item -> {
+                        viewModel.approvePost(viewModel.postsToApproveFlow.value[position])
+                        approvePostsAdapter.submitList(viewModel.postsToApproveFlow.value)
+                        true
+                    }
+                    R.id.delete_post_item -> {
+                        viewModel.removePost(viewModel.postsToApproveFlow.value[position])
+                        approvePostsAdapter.submitList(viewModel.postsToApproveFlow.value)
+                        true
+                    }
+                    R.id.flag_post_item -> {
+                        true
+                    }
+                    R.id.flag_post_item_important ->
+                    {
+                        viewModel.flagPost(position,Flag.IMPORTANT)
+                        approvePostsAdapter.submitList(viewModel.postsToApproveFlow.value)
+                        true
+
+                    }
+                    R.id.flag_post_item_trivial -> {
+                        viewModel.flagPost(position,Flag.TRIVIAL)
+                        approvePostsAdapter.submitList(viewModel.postsToApproveFlow.value)
+                        true
+                    }
+                    R.id.flag_post_item_other -> {
+                        viewModel.flagPost(position,Flag.NONE)
+                        approvePostsAdapter.submitList(viewModel.postsToApproveFlow.value)
+                        true
+                    }
+                    else -> {
+                        false
+                    }
+                }
+            }
             inflate(R.menu.approve_posts_menu)
             show()
         }
     }
 
-    override fun onMenuItemClick(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.approve_post_item -> {
-                viewModel.approvePost(viewModel.postsToApproveFlow.value[item.actionView.id])
-                true
-            }
-            R.id.delete_post_item -> {
-                viewModel.removePost(viewModel.postsToApproveFlow.value[item.actionView.id])
-                true
-            }
-            else -> {
-                false
-            }
-        }
-    }
-
     override fun onItemClick(position: Int, v: View, v2:View?) {
         if(v2 != null)
-            showMenu(v2)
+            showMenu(v2,position)
     }
 
     override fun onItemLongClick(position: Int, v: View) {

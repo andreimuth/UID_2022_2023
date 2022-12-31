@@ -19,6 +19,11 @@
             app:destination="@id/newPost"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"/>
+        <action
+            android:id="@+id/action_home_to_approve_posts"
+            app:destination="@id/approvePosts"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"/>
     </fragment>
 
     <fragment
@@ -71,11 +76,6 @@
         android:id="@+id/approvePosts"
         android:name="com.example.project.ApprovePostsFragment"
         tools:layout="@layout/fragment_approve_posts">
-        <action
-            android:id="@+id/action_approvePosts_to_postDetails"
-            app:destination="@id/postDetails"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"/>
     </fragment>
 
 </navigation>
