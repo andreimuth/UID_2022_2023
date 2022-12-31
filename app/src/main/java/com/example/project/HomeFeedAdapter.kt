@@ -7,9 +7,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.databinding.FeedItemBinding
+import com.example.project.models.Flag
 import com.example.project.models.Post
 
-class HomeFeedAdapter(private val dataSource: List<Post>, val onItemClick: OnItemClick):
+class HomeFeedAdapter(private var dataSource: List<Post>, val onItemClick: OnItemClick):
     RecyclerView.Adapter<HomeFeedAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -25,10 +26,23 @@ class HomeFeedAdapter(private val dataSource: List<Post>, val onItemClick: OnIte
         holder.itemView.setOnClickListener{
             onItemClick.onItemClick(position, it)
         }
+
+        if(dataSource[position].flag != Flag.NONE) { // TODO: CHECK WHAT MIGHT BE WRONG WITH THE RECYCLERVIEW WHEN SCROLLING UP , THE FLAG SEEMS TO APPEAR ON POSTS IT SHOULDN'T
+          if(dataSource[position].flag == Flag.IMPORTANT)
+              holder.flagIcon.setImageResource(R.drawable.ic_important)
+          else
+            holder.flagIcon.setImageResource(R.drawable.ic_trivial)
+        }
     }
 
     override fun getItemCount(): Int {
         return dataSource.size
+    }
+
+    fun submitList(posts: List<Post>) {
+        dataSource = posts
+        notifyDataSetChanged()
+
     }
 
     class ViewHolder(binding: FeedItemBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -37,11 +51,12 @@ class HomeFeedAdapter(private val dataSource: List<Post>, val onItemClick: OnIte
         val date: TextView = binding.date
         val postText: TextView = binding.text
         val moreButton: ImageView = binding.moreButton
+        val flagIcon: ImageView = binding.flagIcon
     }
 
 }
 
 interface OnItemClick {
-    fun onItemClick(position:Int, v: View)
+    fun onItemClick(position:Int, v: View, v2:View? = null)
     fun onItemLongClick(position:Int, v: View)
 }

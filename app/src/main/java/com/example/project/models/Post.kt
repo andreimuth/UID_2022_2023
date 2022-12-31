@@ -6,5 +6,7 @@ data class Post(
     val username: String,
     val dateCreated: String,
     val text: String,
-    val comments: MutableList<Comment>
+    val comments: MutableList<Comment>,
+    var flag: Flag,
+    val type: PostType
 )
