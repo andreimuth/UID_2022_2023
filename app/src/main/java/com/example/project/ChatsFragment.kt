@@ -19,13 +19,7 @@ class ChatsFragment: Fragment(), OnItemClick {
 
     private lateinit var binding: FragmentChatsBinding
     private val viewModel: SharedViewModel by activityViewModels()
-    private val chatsAdapter: ChatsAdapter by lazy {
-        ChatsAdapter(
-            getLatestChatsPerUser(),
-            viewModel.loggedInUser.username,
-            this
-        )
-    }
+    private lateinit var chatsAdapter: ChatsAdapter
     private lateinit var chats: List<Chat>
 
     override fun onCreateView(
@@ -34,9 +28,9 @@ class ChatsFragment: Fragment(), OnItemClick {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentChatsBinding.inflate(inflater, container, false)
+        chats = getLatestChatsPerUser()
         initRecyclerView()
         initClickListeners()
-        chats = getLatestChatsPerUser()
         return binding.root
     }
 
@@ -54,6 +48,7 @@ class ChatsFragment: Fragment(), OnItemClick {
     }
 
     private fun initRecyclerView() {
+        chatsAdapter = ChatsAdapter(chats, viewModel.loggedInUser.username, this)
         binding.chatsRecyclerView.apply {
             adapter = chatsAdapter
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)

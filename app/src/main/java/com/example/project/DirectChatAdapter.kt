@@ -25,10 +25,10 @@ class DirectChatAdapter(private val dataSource: List<Chat>, private val username
     }
 
     override fun getItemViewType(position: Int): Int {
-        if(dataSource[position].usernameFrom == usernameLoggedIn) {
-            return 1
+        return if(dataSource[position].usernameFrom == usernameLoggedIn) {
+            1
         } else {
-            return 2
+            2
         }
     }
 
