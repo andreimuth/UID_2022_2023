@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.PopupMenu
+import androidx.appcompat.widget.SearchView.INVISIBLE
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -19,6 +20,7 @@ import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.activityViewModels
+import com.example.project.models.UserType
 import kotlinx.coroutines.launch
 
 
@@ -39,9 +41,17 @@ class HomeFragment : Fragment(), OnItemClick, PopupMenu.OnMenuItemClickListener 
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+        handleUserRole()
         initClickListeners()
         initRecyclerView()
         return binding.root
+    }
+
+    private fun handleUserRole() {
+        if(viewModel.loggedInUser.type != UserType.MODERATOR) {
+            binding.goToApprovePosts.visibility = INVISIBLE
+            binding.goToApprovePostsButton.visibility = INVISIBLE
+        }
     }
 
     private fun initRecyclerView() {
@@ -51,7 +61,6 @@ class HomeFragment : Fragment(), OnItemClick, PopupMenu.OnMenuItemClickListener 
         }
         createNotificationChannel()
     }
-
 
     private fun createNotificationChannel() {
         val channelId = "all_notifications"
