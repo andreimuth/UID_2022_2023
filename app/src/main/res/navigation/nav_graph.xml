@@ -39,7 +39,13 @@
     <fragment
         android:id="@+id/groups"
         android:name="com.example.project.GroupsFragment"
-        tools:layout="@layout/fragment_groups"/>
+        tools:layout="@layout/fragment_groups">
+        <action
+            android:id="@+id/action_groups_to_newGroup"
+            app:destination="@id/newGroup"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"/>
+    </fragment>
 
     <fragment
         android:id="@+id/postDetails"
@@ -76,6 +82,13 @@
         android:id="@+id/approvePosts"
         android:name="com.example.project.ApprovePostsFragment"
         tools:layout="@layout/fragment_approve_posts">
+    </fragment>
+
+    <fragment
+        android:id="@+id/newGroup"
+        android:name="com.example.project.NewGroupFragment"
+        tools:layout="@layout/fragment_new_group">
+
     </fragment>
 
 </navigation>

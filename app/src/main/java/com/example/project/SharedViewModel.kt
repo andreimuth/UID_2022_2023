@@ -2,10 +2,7 @@ package com.example.project
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.example.project.models.Comment
-import com.example.project.models.Flag
-import com.example.project.models.Post
-import com.example.project.models.PostType
+import com.example.project.models.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -30,6 +27,14 @@ class SharedViewModel : ViewModel() {
             }.toMutableList(),
             Flag.NONE,
             PostType.POST
+        )
+    }.toMutableList()
+
+    var fillGroups: List<Group> = (0..20).map { groupNr ->
+        Group(
+            groupNr,
+            "Group $groupNr",
+            mutableListOf()
         )
     }.toMutableList()
 
