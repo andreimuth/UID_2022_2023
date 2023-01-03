@@ -22,13 +22,8 @@ class DirectChatFragment : Fragment() {
     private lateinit var binding: FragmentDirectChatBinding
     private val viewModel: SharedViewModel by activityViewModels()
     private val args: DirectChatFragmentArgs by navArgs()
-    private val chatsAdapter: DirectChatAdapter by lazy {
-        DirectChatAdapter(
-            getLatestChatsPerUser(),
-            viewModel.loggedInUser.username
-        )
-    }
-    private lateinit var chats: List<Chat>
+    private lateinit var chatsAdapter: DirectChatAdapter
+    private lateinit var chats: MutableList<Chat>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,13 +31,14 @@ class DirectChatFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentDirectChatBinding.inflate(inflater, container, false)
+        chats = getLatestChatsPerUser()
         initClickListeners()
         initRecyclerView()
-        chats = getLatestChatsPerUser()
         return binding.root
     }
 
     private fun initRecyclerView() {
+        chatsAdapter = DirectChatAdapter(chats, viewModel.loggedInUser.username)
         binding.chatsRecyclerView.apply {
             adapter = chatsAdapter
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
@@ -61,13 +57,13 @@ class DirectChatFragment : Fragment() {
 
         binding.postCommentButton.setOnClickListener{
             val comment = binding.messageInputText.text.toString()
-            val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm")
+            val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
             val currentDateAndTime = sdf.format(Date())
             val chat = Chat(viewModel.chats.size + 1, 1, args.username, viewModel.loggedInUser.username, comment, currentDateAndTime, ChatStatus.SEND)
             viewModel.addChat(chat)
             binding.messageInputText.text.clear()
-            chats = chats + chat
-            chatsAdapter.notifyItemInserted(chats.size + 1)
+            chats.add(0, chat)
+            chatsAdapter.notifyItemRangeChanged(0, chats.size)
         }
     }
 

@@ -30,11 +30,11 @@ class SharedViewModel : ViewModel() {
         )
     }.toMutableList()
 
-    var chats: MutableList<Chat> = listOf(Chat(1, 1, "andrei", "george", "Hey", "2022-12-24 20:12", ChatStatus.SEND),
-                                          Chat(2, 1, "alexia", "george", "Hello", "2022-12-13 17:36", ChatStatus.SEND),
-                                          Chat(3, 1, "george", "alexia", "Hi", "2022-12-14 10:22", ChatStatus.SEND),
-                                          Chat(4, 1, "george", "andrei", "Hello", "2022-12-24 20:25", ChatStatus.SEND),
-                                          Chat(5, 1, "george", "admin", "Yo!", "2022-12-23 17:36", ChatStatus.SEND)).toMutableList()
+    var chats: MutableList<Chat> = listOf(Chat(1, 1, "andrei", "george", "Hey", "2022-12-24 20:12:23", ChatStatus.SEND),
+                                          Chat(2, 1, "alexia", "george", "Hello", "2022-12-13 17:36:13", ChatStatus.SEND),
+                                          Chat(3, 1, "george", "alexia", "Hi", "2022-12-14 10:22:14", ChatStatus.SEND),
+                                          Chat(4, 1, "george", "andrei", "Hello", "2022-12-24 20:25:26", ChatStatus.SEND),
+                                          Chat(5, 1, "george", "admin", "Yo!", "2022-12-23 17:36:35", ChatStatus.SEND)).toMutableList()
 
     private val chatsStateFlow: MutableStateFlow<List<Chat>> = MutableStateFlow(chats)
     val chatsFlow = chatsStateFlow.asStateFlow()
