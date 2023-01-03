@@ -2,10 +2,7 @@ package com.example.project
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.example.project.models.Comment
-import com.example.project.models.Flag
-import com.example.project.models.Post
-import com.example.project.models.PostType
+import com.example.project.models.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -33,6 +30,24 @@ class SharedViewModel : ViewModel() {
         )
     }.toMutableList()
 
+    var chats: MutableList<Chat> = listOf(Chat(1, 1, "andrei", "george", "Hey", "2022-12-24 20:12", ChatStatus.SEND),
+                                          Chat(2, 1, "alexia", "george", "Hello", "2022-12-13 17:36", ChatStatus.SEND),
+                                          Chat(3, 1, "george", "alexia", "Hi", "2022-12-14 10:22", ChatStatus.SEND),
+                                          Chat(4, 1, "george", "andrei", "Hello", "2022-12-24 20:25", ChatStatus.SEND),
+                                          Chat(5, 1, "george", "admin", "Yo!", "2022-12-23 17:36", ChatStatus.SEND)).toMutableList()
+
+    private val chatsStateFlow: MutableStateFlow<List<Chat>> = MutableStateFlow(chats)
+    val chatsFlow = chatsStateFlow.asStateFlow()
+
+    var loggedInUser: User = User(-1, -1, "a", "a", UserType.STUDENT)
+
+    var users: MutableList<User> = listOf(User(1, 1, "admin", "admin", UserType.ADMIN),
+                                          User(2, 1, "student", "student", UserType.STUDENT),
+                                          User(3, 1, "alexia", "pop", UserType.STUDENT),
+                                          User(4, 1, "andrei", "muth", UserType.STUDENT),
+                                          User(5, 1, "george", "petruta", UserType.STUDENT),
+                                          User(6, 1, "academic", "academic", UserType.ACADEMIC),
+                                          User(7, 1, "moderator", "moderator", UserType.MODERATOR)).toMutableList()
 
     private val postsToApproveStateFlow: MutableStateFlow<List<Post>> = MutableStateFlow(emptyList())
     val postsToApproveFlow = postsToApproveStateFlow.asStateFlow()
@@ -40,6 +55,14 @@ class SharedViewModel : ViewModel() {
 
     private val postsStateFlow: MutableStateFlow<List<Post>> = MutableStateFlow(feedPosts)
     val postsFlow = postsStateFlow.asStateFlow()
+
+    fun addChat(chat: Chat) {
+        chatsStateFlow.value = chatsStateFlow.value + chat
+    }
+
+    fun addUser(user: User) {
+        users.add(user)
+    }
 
     fun approvePost(post: Post) {
         val posts = postsStateFlow.value.toMutableList()

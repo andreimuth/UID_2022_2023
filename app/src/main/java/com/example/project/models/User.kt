@@ -5,5 +5,5 @@ data class User(
     val userIcon: Int,
     val username: String,
     val password: String,
-    val type: String,
+    val type: UserType,
 )

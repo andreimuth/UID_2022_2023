@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/user_icon"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="168dp"
+        android:src="@drawable/ic_user"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/register_username_text_input"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/gray"
+        android:hint="Username"
+        android:inputType="text"
+        android:padding="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_icon" />
+
+    <EditText
+        android:id="@+id/register_password_text_input"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/gray"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:padding="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/register_username_text_input" />
+
+    <Spinner
+        android:id="@+id/register_type_user_spinner_input"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/gray"
+        android:spinnerMode="dropdown"
+        android:textAlignment="center"
+        android:padding="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/register_password_text_input" />
+
+    <Button
+        android:id="@+id/register_button"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:text="Register"
+        app:layout_constraintTop_toBottomOf="@id/register_type_user_spinner_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="20dp"/>
+
+    <TextView
+        android:id="@+id/register_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/register_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="20sp"
+        android:layout_marginTop="10dp"
+        android:textColor="#FF0000"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
