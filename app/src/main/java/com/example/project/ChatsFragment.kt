@@ -82,7 +82,7 @@ class ChatsFragment: Fragment(), OnItemClick {
         val selectedChat = chats[position]
         var selectedUsername = selectedChat.usernameFrom
         if(selectedChat.usernameFrom == viewModel.loggedInUser.username) {
-            chats[position].usernameTo
+            selectedUsername = chats[position].usernameTo
         }
         findNavController().navigate(ChatsFragmentDirections.actionChatsToDirectChat(selectedUsername))
     }

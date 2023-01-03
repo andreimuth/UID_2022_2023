@@ -1,5 +1,7 @@
 package com.example.project
 
+import android.annotation.SuppressLint
+import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.databinding.FragmentDirectChatBinding
 import com.example.project.models.Chat
+import com.example.project.models.ChatStatus
+import java.util.*
 
 class DirectChatFragment : Fragment() {
 
@@ -49,6 +53,22 @@ class DirectChatFragment : Fragment() {
         return viewModel.chatsFlow.value.filter{ chat ->
             (chat.usernameFrom == viewModel.loggedInUser.username && chat.usernameTo == args.username) ||
                     (chat.usernameTo == viewModel.loggedInUser.username && chat.usernameFrom == args.username) }.sortedByDescending{ it.dateSend }.toMutableList()
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.postCommentButton.setOnClickListener{
+            val comment = binding.messageInputText.text.toString()
+            val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm")
+            val currentDateAndTime = sdf.format(Date())
+            val chat = Chat(viewModel.chats.size + 1, 1, args.username, viewModel.loggedInUser.username, comment, currentDateAndTime, ChatStatus.SEND)
+            viewModel.addChat(chat)
+            binding.messageInputText.text.clear()
+            chats = chats + chat
+            chatsAdapter.notifyItemInserted(chats.size + 1)
+        }
     }
 
     private fun initClickListeners() {
