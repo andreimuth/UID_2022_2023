@@ -30,14 +30,17 @@ class SharedViewModel : ViewModel() {
         )
     }.toMutableList()
 
-    var fillGroups: List<Group> = (0..20).map { groupNr ->
+    var groups: List<Group> = (0..20).map { groupNr ->
         Group(
             groupNr,
             "Group $groupNr",
+            "This is group number $groupNr",
+            mutableListOf(),
             mutableListOf()
         )
     }.toMutableList()
 
+    var loggedInUser: User = User(-1, -1, "a", "a", UserType.MODERATOR)
 
     private val postsToApproveStateFlow: MutableStateFlow<List<Post>> = MutableStateFlow(emptyList())
     val postsToApproveFlow = postsToApproveStateFlow.asStateFlow()
@@ -45,6 +48,9 @@ class SharedViewModel : ViewModel() {
 
     private val postsStateFlow: MutableStateFlow<List<Post>> = MutableStateFlow(feedPosts)
     val postsFlow = postsStateFlow.asStateFlow()
+
+    private val groupsStateFlow: MutableStateFlow<List<Group>> = MutableStateFlow(groups)
+    val groupsFlow = groupsStateFlow.asStateFlow()
 
     fun approvePost(post: Post) {
         val posts = postsStateFlow.value.toMutableList()
@@ -100,6 +106,26 @@ class SharedViewModel : ViewModel() {
         postsToApproveStateFlow.value = postsToApproveStateFlow.value.filter { post ->
             post.username.contains(keyword) || post.text.contains(keyword)
         }.toMutableList()
+    }
+
+    fun addGroup(group: Group) {
+        groupsStateFlow.value = groupsStateFlow.value + group
+        groups = groups + group
+    }
+
+    fun filterGroupsByKeyword(keyword: String) {
+        groupsStateFlow.value = groups.filter { group ->
+            group.groupName.contains(keyword) || group.groupDescription.contains(keyword)
+        }.toMutableList()
+        println(groupsStateFlow.value.size)
+    }
+
+    fun addUserToGroup(group: Group) {
+        group.users.add(loggedInUser)
+    }
+
+    fun isUserInGroup(group: Group): Boolean {
+        return group.users.contains(loggedInUser)
     }
 
 }

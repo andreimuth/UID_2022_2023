@@ -32,16 +32,25 @@
             android:textStyle="bold"
             android:layout_marginTop="5dp"/>
 
+        <TextView
+            android:id="@+id/group_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/group_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            android:ellipsize="end"
+            />
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:text="JOIN"
             android:textSize="12dp"
-            android:backgroundTint="#818589"
+            android:backgroundTint="@android:color/transparent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            />
-
+            android:id="@+id/join_button"
+            android:enabled="false"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
