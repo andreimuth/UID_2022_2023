@@ -43,17 +43,24 @@ class GroupsFragment: Fragment(), OnItemClick {
 
     override fun onItemClick(position: Int, v: View, v2: View?) {
         val group = viewModel.groupsFlow.value[position]
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Join ${group.groupName}?")
-        builder.setMessage(group.groupDescription)
-        builder.setPositiveButton("Join") { dialog, which ->
-            joinGroup(group)
-            dialog.dismiss()
+
+        if(!viewModel.isUserInGroup(group)) {
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("Join ${group.groupName}?")
+            builder.setMessage(group.groupDescription)
+            builder.setPositiveButton("Join") { dialog, _ ->
+                joinGroup(group)
+                dialog.dismiss()
+                findNavController().navigate(GroupsFragmentDirections.actionGroupsToGroupFeed(group.id.toString()))
+            }
+            builder.setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            builder.show()
+            return
         }
-        builder.setNegativeButton("Cancel") { dialog, which ->
-            dialog.dismiss()
-        }
-        builder.show()
+
+        findNavController().navigate(GroupsFragmentDirections.actionGroupsToGroupFeed(group.id.toString()))
     }
 
     override fun onItemLongClick(position: Int, v: View) {

@@ -79,7 +79,7 @@ class HomeFragment : Fragment(), OnItemClick, PopupMenu.OnMenuItemClickListener 
 
     private fun initClickListeners() {
         binding.addPostButton.setOnClickListener {
-            findNavController().navigate(HomeFragmentDirections.actionHomeToNewPost())
+            findNavController().navigate(HomeFragmentDirections.actionHomeToNewPost("-1"))
         }
         binding.goToApprovePostsButton.setOnClickListener{
             findNavController().navigate(HomeFragmentDirections.actionHomeToApprovePosts())
@@ -150,7 +150,7 @@ class HomeFragment : Fragment(), OnItemClick, PopupMenu.OnMenuItemClickListener 
 
     override fun onItemClick(position: Int, v: View,v2: View?) {
         val selectedPost = viewModel.feedPosts[position]
-        findNavController().navigate(HomeFragmentDirections.actionHomeToPostDetails(selectedPost.id.toString()))
+        findNavController().navigate(HomeFragmentDirections.actionHomeToPostDetails(selectedPost.id.toString(), "-1"))
     }
 
     override fun onItemLongClick(position: Int, v: View) {

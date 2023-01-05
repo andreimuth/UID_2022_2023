@@ -26,7 +26,8 @@ class SharedViewModel : ViewModel() {
                 )
             }.toMutableList(),
             Flag.NONE,
-            PostType.POST
+            PostType.POST,
+            "-1"
         )
     }.toMutableList()
 
@@ -53,10 +54,16 @@ class SharedViewModel : ViewModel() {
     val groupsFlow = groupsStateFlow.asStateFlow()
 
     fun approvePost(post: Post) {
-        val posts = postsStateFlow.value.toMutableList()
-        posts.add(post)
-        postsStateFlow.value = posts
-        feedPosts = feedPosts + post
+
+        if(post.groupId == "-1") {
+            val posts = postsStateFlow.value.toMutableList()
+            posts.add(post)
+            postsStateFlow.value = posts
+            feedPosts = feedPosts + post
+        } else {
+            val group = groupsStateFlow.value[post.groupId.toInt()]
+            group.posts.add(post)
+        }
 
         removePost(post)
     }
@@ -72,16 +79,19 @@ class SharedViewModel : ViewModel() {
     }
 
 
-    fun addComment(postId: Int, comment: Comment) {
-        postsStateFlow.value = postsStateFlow.value.map { post ->
-            if (post.id == postId) {
-                post.copy(comments = post.comments.apply { add(comment) })
-            } else {
-                post
-            }
-        }.toMutableList()
+    fun addComment(post: Post, comment: Comment) {
+        if(post.groupId == "-1") {
+            postsStateFlow.value = postsStateFlow.value.map { p ->
+                if (p.id == post.id) {
+                    p.copy(comments = p.comments.apply { add(comment) })
+                } else {
+                    p
+                }
+            }.toMutableList()
 
-        feedPosts[postId].comments.add(comment)
+        } else {
+            post.comments.add(comment)
+        }
     }
 
     fun flagPost(position: Int, flag: Flag) {
