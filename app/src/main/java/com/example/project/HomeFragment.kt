@@ -49,8 +49,12 @@ class HomeFragment : Fragment(), OnItemClick, PopupMenu.OnMenuItemClickListener 
 
     private fun handleUserRole() {
         if(viewModel.loggedInUser.type != UserType.MODERATOR) {
-            binding.goToApprovePosts.visibility = INVISIBLE
-            binding.goToApprovePostsButton.visibility = INVISIBLE
+            binding.goToApprovePosts.visibility = View.GONE
+            binding.goToApprovePostsButton.visibility = View.GONE
+        }
+        if(viewModel.loggedInUser.type != UserType.ADMIN) {
+            binding.goToUsersPage.visibility = View.GONE
+            binding.goToUsersPage.visibility = View.GONE
         }
     }
 
@@ -88,10 +92,13 @@ class HomeFragment : Fragment(), OnItemClick, PopupMenu.OnMenuItemClickListener 
 
     private fun initClickListeners() {
         binding.addPostButton.setOnClickListener {
-            findNavController().navigate(HomeFragmentDirections.actionHomeToNewPost())
+            findNavController().navigate(HomeFragmentDirections.actionHomeToNewPost("-1"))
         }
         binding.goToApprovePostsButton.setOnClickListener{
             findNavController().navigate(HomeFragmentDirections.actionHomeToApprovePosts())
+        }
+        binding.goToUsersPageButton.setOnClickListener{
+            findNavController().navigate(HomeFragmentDirections.actionHomeToBanUsers())
         }
 
         binding.filterButton.setOnClickListener {
@@ -159,7 +166,7 @@ class HomeFragment : Fragment(), OnItemClick, PopupMenu.OnMenuItemClickListener 
 
     override fun onItemClick(position: Int, v: View,v2: View?) {
         val selectedPost = viewModel.feedPosts[position]
-        findNavController().navigate(HomeFragmentDirections.actionHomeToPostDetails(selectedPost.id.toString()))
+        findNavController().navigate(HomeFragmentDirections.actionHomeToPostDetails(selectedPost.id.toString(), "-1"))
     }
 
     override fun onItemLongClick(position: Int, v: View) {

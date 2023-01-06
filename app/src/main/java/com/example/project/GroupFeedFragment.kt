@@ -13,9 +13,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.databinding.FragmentGroupFeedBinding
+import com.example.project.models.Group
 import com.example.project.models.PostType
 import kotlinx.coroutines.launch
 
@@ -23,7 +25,9 @@ class GroupFeedFragment: Fragment(), OnItemClick, PopupMenu.OnMenuItemClickListe
 
     private lateinit var binding: FragmentGroupFeedBinding
     private val viewModel: SharedViewModel by activityViewModels()
-    private val groupFeedAdapter: HomeFeedAdapter by lazy { HomeFeedAdapter(viewModel.postsFlow.value, this) }
+    private lateinit var groupFeedAdapter: HomeFeedAdapter
+    private val args: GroupFeedFragmentArgs by navArgs()
+    private lateinit var group: Group
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,9 +35,26 @@ class GroupFeedFragment: Fragment(), OnItemClick, PopupMenu.OnMenuItemClickListe
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentGroupFeedBinding.inflate(inflater, container, false)
+        initGroup()
+        initAdapter()
         initClickListeners()
         initRecyclerView()
         return binding.root;
+    }
+
+    private fun initGroup() {
+        group = viewModel.groupsFlow.value[args.groupId.toInt()]
+        binding.groupName.text = group.groupName
+        if(group.posts.isEmpty()) {
+            binding.noPosts.visibility = View.VISIBLE
+        }
+    }
+
+    private fun initAdapter() {
+        groupFeedAdapter = HomeFeedAdapter(
+            group.posts,
+            this,
+        )
     }
 
     private fun initRecyclerView() {
@@ -48,7 +69,7 @@ class GroupFeedFragment: Fragment(), OnItemClick, PopupMenu.OnMenuItemClickListe
             findNavController().navigateUp()
         }
         binding.addPostButton.setOnClickListener{
-            findNavController().navigate(GroupFeedFragmentDirections.actionGroupFeedToNewPost())
+            findNavController().navigate(GroupFeedFragmentDirections.actionGroupFeedToNewPost(group.id.toString()))
         }
 
         binding.filterButton.setOnClickListener{
@@ -82,9 +103,7 @@ class GroupFeedFragment: Fragment(), OnItemClick, PopupMenu.OnMenuItemClickListe
         })
 
         lifecycleScope.launch {
-            viewModel.postsFlow.collect { posts ->
-                groupFeedAdapter.submitList(posts)
-            }
+            groupFeedAdapter.submitList(group.posts)
         }
     }
 
@@ -116,8 +135,8 @@ class GroupFeedFragment: Fragment(), OnItemClick, PopupMenu.OnMenuItemClickListe
 
 
     override fun onItemClick(position: Int, v: View,v2: View?) {
-        val selectedPost = viewModel.feedPosts[position]
-        findNavController().navigate(GroupFeedFragmentDirections.actionGroupFeedToPostDetails(selectedPost.id.toString()))
+        val selectedPost = group.posts[position]
+        findNavController().navigate(GroupFeedFragmentDirections.actionGroupFeedToPostDetails(selectedPost.id.toString(), group.id.toString()))
     }
 
     override fun onItemLongClick(position: Int, v: View) {

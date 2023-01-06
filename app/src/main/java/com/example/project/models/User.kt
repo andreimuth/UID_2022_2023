@@ -6,4 +6,5 @@ data class User(
     val username: String,
     val password: String,
     val type: UserType,
+    var isBanned: Boolean,
 )

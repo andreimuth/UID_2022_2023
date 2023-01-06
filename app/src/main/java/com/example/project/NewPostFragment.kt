@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.project.databinding.FragmentNewPostBinding
 import com.example.project.models.Flag
 import com.example.project.models.Post
@@ -20,7 +21,7 @@ class NewPostFragment : Fragment() {
 
     private lateinit var binding: FragmentNewPostBinding
     private val viewModel: SharedViewModel by activityViewModels()
-
+    private val args: NewPostFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,17 +53,19 @@ class NewPostFragment : Fragment() {
                 }
             }
         }
+
         binding.postButton.setOnClickListener {
             viewModel.addPost(
                 Post(
-                    viewModel.feedPosts.size,
+                    if(args.groupId == "1") viewModel.feedPosts.size else viewModel.groups[args.groupId.toInt()].posts.size,
                     0,
                     "Username " + viewModel.feedPosts.size,
                     "Date " + viewModel.feedPosts.size,
                     binding.postTextInput.text.toString(),
                     mutableListOf(),
                     Flag.NONE,
-                    PostType.POST
+                    PostType.POST,
+                    args.groupId
                 )
             ).also {   // TODO: CREATE POST BASED ON TYPE
                 findNavController().navigateUp()

@@ -51,6 +51,12 @@
             app:destination="@id/approvePosts"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"/>
+
+        <action
+            android:id="@+id/action_home_to_banUsers"
+            app:destination="@id/banUsers"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"/>
     </fragment>
 
     <fragment
@@ -87,7 +93,19 @@
     <fragment
         android:id="@+id/groups"
         android:name="com.example.project.GroupsFragment"
-        tools:layout="@layout/fragment_groups"/>
+        tools:layout="@layout/fragment_groups">
+        <action
+            android:id="@+id/action_groups_to_newGroup"
+            app:destination="@id/newGroup"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"/>
+
+        <action
+            android:id="@+id/action_groups_to_groupFeed"
+            app:destination="@id/groupFeed"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"/>
+    </fragment>
 
     <fragment
         android:id="@+id/postDetails"
@@ -96,12 +114,19 @@
         <argument
             android:name="postId"
             app:argType="string" />
+        <argument
+            android:name="groupId"
+            app:argType="string" />
     </fragment>
 
     <fragment
         android:id="@+id/newPost"
         android:name="com.example.project.NewPostFragment"
-        tools:layout="@layout/fragment_new_post"/>
+        tools:layout="@layout/fragment_new_post">
+        <argument
+            android:name="groupId"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/groupFeed"
@@ -118,12 +143,29 @@
             app:destination="@id/postDetails"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"/>
+
+        <argument
+            android:name="groupId"
+            app:argType="string" />
     </fragment>
 
     <fragment
         android:id="@+id/approvePosts"
         android:name="com.example.project.ApprovePostsFragment"
         tools:layout="@layout/fragment_approve_posts">
+    </fragment>
+
+    <fragment
+        android:id="@+id/newGroup"
+        android:name="com.example.project.NewGroupFragment"
+        tools:layout="@layout/fragment_new_group">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/banUsers"
+        android:name="com.example.project.BanUsersFragment"
+        tools:layout="@layout/fragment_ban_users">
     </fragment>
 
 </navigation>

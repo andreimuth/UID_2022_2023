@@ -8,5 +8,6 @@ data class Post(
     val text: String,
     val comments: MutableList<Comment>,
     var flag: Flag,
-    val type: PostType
+    val type: PostType,
+    val groupId: String
 )

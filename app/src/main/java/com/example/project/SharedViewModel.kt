@@ -26,7 +26,18 @@ class SharedViewModel : ViewModel() {
                 )
             }.toMutableList(),
             Flag.NONE,
-            PostType.POST
+            PostType.POST,
+            "-1"
+        )
+    }.toMutableList()
+
+    var groups: List<Group> = (0..20).map { groupNr ->
+        Group(
+            groupNr,
+            "Group $groupNr",
+            "This is group number $groupNr",
+            mutableListOf(),
+            mutableListOf()
         )
     }.toMutableList()
 
@@ -39,15 +50,15 @@ class SharedViewModel : ViewModel() {
     private val chatsStateFlow: MutableStateFlow<List<Chat>> = MutableStateFlow(chats)
     val chatsFlow = chatsStateFlow.asStateFlow()
 
-    var loggedInUser: User = User(-1, -1, "a", "a", UserType.STUDENT)
+    var loggedInUser: User = User(-1, -1, "a", "a", UserType.STUDENT, false)
 
-    var users: MutableList<User> = listOf(User(1, 1, "admin", "admin", UserType.ADMIN),
-                                          User(2, 1, "student", "student", UserType.STUDENT),
-                                          User(3, 1, "alexia", "pop", UserType.STUDENT),
-                                          User(4, 1, "andrei", "muth", UserType.STUDENT),
-                                          User(5, 1, "george", "petruta", UserType.STUDENT),
-                                          User(6, 1, "academic", "academic", UserType.ACADEMIC),
-                                          User(7, 1, "moderator", "moderator", UserType.MODERATOR)).toMutableList()
+    var users: MutableList<User> = listOf(User(1, 1, "admin", "admin", UserType.ADMIN, false),
+                                          User(2, 1, "student", "student", UserType.STUDENT, false),
+                                          User(3, 1, "alexia", "pop", UserType.STUDENT, false),
+                                          User(4, 1, "andrei", "muth", UserType.STUDENT, false),
+                                          User(5, 1, "george", "petruta", UserType.STUDENT, false),
+                                          User(6, 1, "academic", "academic", UserType.ACADEMIC, false),
+                                          User(7, 1, "moderator", "moderator", UserType.MODERATOR, false)).toMutableList()
 
     private val postsToApproveStateFlow: MutableStateFlow<List<Post>> = MutableStateFlow(emptyList())
     val postsToApproveFlow = postsToApproveStateFlow.asStateFlow()
@@ -55,6 +66,12 @@ class SharedViewModel : ViewModel() {
 
     private val postsStateFlow: MutableStateFlow<List<Post>> = MutableStateFlow(feedPosts)
     val postsFlow = postsStateFlow.asStateFlow()
+
+    private val groupsStateFlow: MutableStateFlow<List<Group>> = MutableStateFlow(groups)
+    val groupsFlow = groupsStateFlow.asStateFlow()
+
+    private val usersStateFlow: MutableStateFlow<List<User>> = MutableStateFlow(users)
+    val usersFlow = usersStateFlow.asStateFlow()
 
     fun addChat(chat: Chat) {
         chatsStateFlow.value = chatsStateFlow.value + chat
@@ -65,10 +82,16 @@ class SharedViewModel : ViewModel() {
     }
 
     fun approvePost(post: Post) {
-        val posts = postsStateFlow.value.toMutableList()
-        posts.add(post)
-        postsStateFlow.value = posts
-        feedPosts = feedPosts + post
+
+        if(post.groupId == "-1") {
+            val posts = postsStateFlow.value.toMutableList()
+            posts.add(post)
+            postsStateFlow.value = posts
+            feedPosts = feedPosts + post
+        } else {
+            val group = groupsStateFlow.value[post.groupId.toInt()]
+            group.posts.add(post)
+        }
 
         removePost(post)
     }
@@ -84,16 +107,19 @@ class SharedViewModel : ViewModel() {
     }
 
 
-    fun addComment(postId: Int, comment: Comment) {
-        postsStateFlow.value = postsStateFlow.value.map { post ->
-            if (post.id == postId) {
-                post.copy(comments = post.comments.apply { add(comment) })
-            } else {
-                post
-            }
-        }.toMutableList()
+    fun addComment(post: Post, comment: Comment) {
+        if(post.groupId == "-1") {
+            postsStateFlow.value = postsStateFlow.value.map { p ->
+                if (p.id == post.id) {
+                    p.copy(comments = p.comments.apply { add(comment) })
+                } else {
+                    p
+                }
+            }.toMutableList()
 
-        feedPosts[postId].comments.add(comment)
+        } else {
+            post.comments.add(comment)
+        }
     }
 
     fun flagPost(position: Int, flag: Flag) {
@@ -117,6 +143,31 @@ class SharedViewModel : ViewModel() {
     fun filterPostsToApproveByKeyword(keyword: String) {
         postsToApproveStateFlow.value = postsToApproveStateFlow.value.filter { post ->
             post.username.contains(keyword) || post.text.contains(keyword)
+        }.toMutableList()
+    }
+
+    fun addGroup(group: Group) {
+        groupsStateFlow.value = groupsStateFlow.value + group
+        groups = groups + group
+    }
+
+    fun filterGroupsByKeyword(keyword: String) {
+        groupsStateFlow.value = groups.filter { group ->
+            group.groupName.contains(keyword) || group.groupDescription.contains(keyword)
+        }.toMutableList()
+    }
+
+    fun addUserToGroup(group: Group) {
+        group.users.add(loggedInUser)
+    }
+
+    fun isUserInGroup(group: Group): Boolean {
+        return group.users.contains(loggedInUser)
+    }
+
+    fun searchUsers(keyword: String) {
+        usersStateFlow.value = users.filter { user ->
+            user.username.contains(keyword)
         }.toMutableList()
     }
 
