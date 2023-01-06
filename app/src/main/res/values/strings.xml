@@ -4,4 +4,6 @@
     <string name="chats">Chats</string>
     <string name="groups">Groups</string>
     <string name="settings">Settings</string>
+    <string name="not_yet_registered">Not registered yet? \n Click here!</string>
+    <string name="logout">Logout</string>
 </resources>

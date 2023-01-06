@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.PopupMenu
+import androidx.appcompat.widget.SearchView.INVISIBLE
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -64,7 +65,6 @@ class HomeFragment : Fragment(), OnItemClick, PopupMenu.OnMenuItemClickListener 
         }
         createNotificationChannel()
     }
-
 
     private fun createNotificationChannel() {
         val channelId = "all_notifications"

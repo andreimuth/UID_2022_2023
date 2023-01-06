@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -13,6 +15,7 @@ import com.example.project.databinding.FragmentNewPostBinding
 import com.example.project.models.Flag
 import com.example.project.models.Post
 import com.example.project.models.PostType
+import com.example.project.models.UserType
 
 class NewPostFragment : Fragment() {
 
@@ -26,17 +29,28 @@ class NewPostFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentNewPostBinding.inflate(inflater, container, false)
+        handleUserRole()
         initClickListeners()
         return binding.root
     }
 
     @SuppressLint("SetTextI18n")
+    private fun handleUserRole() {
+        if(viewModel.loggedInUser.type != UserType.ACADEMIC) {
+            binding.titleToggleButton.text = "New Post"
+            binding.titleToggleButton.icon = context?.let { ContextCompat.getDrawable(it, R.drawable.ic_empty) }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
     private fun initClickListeners() {
-        binding.titleToggleButton.setOnClickListener{
-            if(binding.titleToggleButton.text == "New Post"){
-               binding.titleToggleButton.text = "New Announcement"
-            } else {
-                binding.titleToggleButton.text = "New Post"
+        if(viewModel.loggedInUser.type == UserType.ACADEMIC) {
+            binding.titleToggleButton.setOnClickListener {
+                if (binding.titleToggleButton.text == "New Post") {
+                    binding.titleToggleButton.text = "New Announcement"
+                } else {
+                    binding.titleToggleButton.text = "New Post"
+                }
             }
         }
 
