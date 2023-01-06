@@ -94,7 +94,6 @@ class GroupsFragment: Fragment(), OnItemClick {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                println(newText)
                 if(newText != null) {
                     viewModel.filterGroupsByKeyword(newText)
                 }

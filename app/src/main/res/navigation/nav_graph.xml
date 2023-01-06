@@ -24,6 +24,12 @@
             app:destination="@id/approvePosts"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"/>
+
+        <action
+            android:id="@+id/action_home_to_banUsers"
+            app:destination="@id/banUsers"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"/>
     </fragment>
 
     <fragment
@@ -106,6 +112,12 @@
         android:name="com.example.project.NewGroupFragment"
         tools:layout="@layout/fragment_new_group">
 
+    </fragment>
+
+    <fragment
+        android:id="@+id/banUsers"
+        android:name="com.example.project.BanUsersFragment"
+        tools:layout="@layout/fragment_ban_users">
     </fragment>
 
 </navigation>

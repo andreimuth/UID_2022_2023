@@ -19,6 +19,7 @@ import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.activityViewModels
+import com.example.project.models.UserType
 import kotlinx.coroutines.launch
 
 
@@ -39,9 +40,21 @@ class HomeFragment : Fragment(), OnItemClick, PopupMenu.OnMenuItemClickListener 
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+        handleUserRole()
         initClickListeners()
         initRecyclerView()
         return binding.root
+    }
+
+    private fun handleUserRole() {
+        if(viewModel.loggedInUser.type != UserType.MODERATOR) {
+            binding.goToApprovePosts.visibility = View.GONE
+            binding.goToApprovePostsButton.visibility = View.GONE
+        }
+        if(viewModel.loggedInUser.type != UserType.ADMIN) {
+            binding.goToUsersPage.visibility = View.GONE
+            binding.goToUsersPage.visibility = View.GONE
+        }
     }
 
     private fun initRecyclerView() {
@@ -83,6 +96,9 @@ class HomeFragment : Fragment(), OnItemClick, PopupMenu.OnMenuItemClickListener 
         }
         binding.goToApprovePostsButton.setOnClickListener{
             findNavController().navigate(HomeFragmentDirections.actionHomeToApprovePosts())
+        }
+        binding.goToUsersPageButton.setOnClickListener{
+            findNavController().navigate(HomeFragmentDirections.actionHomeToBanUsers())
         }
 
         binding.filterButton.setOnClickListener {
