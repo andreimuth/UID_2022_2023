@@ -50,15 +50,15 @@ class SharedViewModel : ViewModel() {
     private val chatsStateFlow: MutableStateFlow<List<Chat>> = MutableStateFlow(chats)
     val chatsFlow = chatsStateFlow.asStateFlow()
 
-    var loggedInUser: User = User(-1, -1, "a", "a", UserType.STUDENT)
+    var loggedInUser: User = User(-1, -1, "a", "a", UserType.STUDENT, false)
 
-    var users: MutableList<User> = listOf(User(1, 1, "admin", "admin", UserType.ADMIN),
-                                          User(2, 1, "student", "student", UserType.STUDENT),
-                                          User(3, 1, "alexia", "pop", UserType.STUDENT),
-                                          User(4, 1, "andrei", "muth", UserType.STUDENT),
-                                          User(5, 1, "george", "petruta", UserType.STUDENT),
-                                          User(6, 1, "academic", "academic", UserType.ACADEMIC),
-                                          User(7, 1, "moderator", "moderator", UserType.MODERATOR)).toMutableList()
+    var users: MutableList<User> = listOf(User(1, 1, "admin", "admin", UserType.ADMIN, false),
+                                          User(2, 1, "student", "student", UserType.STUDENT, false),
+                                          User(3, 1, "alexia", "pop", UserType.STUDENT, false),
+                                          User(4, 1, "andrei", "muth", UserType.STUDENT, false),
+                                          User(5, 1, "george", "petruta", UserType.STUDENT, false),
+                                          User(6, 1, "academic", "academic", UserType.ACADEMIC, false),
+                                          User(7, 1, "moderator", "moderator", UserType.MODERATOR, false)).toMutableList()
 
     private val postsToApproveStateFlow: MutableStateFlow<List<Post>> = MutableStateFlow(emptyList())
     val postsToApproveFlow = postsToApproveStateFlow.asStateFlow()
