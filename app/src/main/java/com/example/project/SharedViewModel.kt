@@ -82,7 +82,6 @@ class SharedViewModel : ViewModel() {
     }
 
     fun addChat(chat: Chat) {
-        chatsStateFlow.value = chatsStateFlow.value + chat
         chats.add(chat)
     }
 
@@ -184,8 +183,9 @@ class SharedViewModel : ViewModel() {
         chatsStateFlow.value = chats.filter { chat ->
             if(loggedInUser.username == chat.usernameFrom) {
                 chat.usernameTo.contains(keyword)
+            } else {
+                chat.usernameFrom.contains(keyword)
             }
-            chat.usernameFrom.contains(keyword)
          }.toMutableList()
     }
 
