@@ -44,7 +44,8 @@ class PostDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val post = viewModel.feedPosts[args.postId.toInt()]
+        val post = if(args.groupId == "-1") viewModel.feedPosts[args.postId.toInt()] else
+            viewModel.groups[args.groupId.toInt()].posts[args.postId.toInt()]
         binding.postText.text = post.text
         binding.date.text = post.dateCreated
         binding.username.text = post.username
@@ -56,10 +57,10 @@ class PostDetailsFragment : Fragment() {
                 binding.flagIcon.setImageResource(R.drawable.ic_trivial)
         }
 
-        binding.postCommentButton.setOnClickListener{
+        binding.postCommentButton.setOnClickListener {
             val comment = binding.commentInputText.text.toString()
             viewModel.addComment(
-                post.id,
+                post,
                 Comment(post.comments.size + 1, 0, "username", "date", comment)
             )
             binding.commentInputText.text.clear()
@@ -79,7 +80,11 @@ class PostDetailsFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
-        myAdapter = CommentFeedAdapter(viewModel.feedPosts[args.postId.toInt()].comments)
+        myAdapter = if(args.groupId == "-1") {
+            CommentFeedAdapter(viewModel.feedPosts[args.postId.toInt()].comments)
+        } else {
+            CommentFeedAdapter(viewModel.groups[args.groupId.toInt()].posts[args.postId.toInt()].comments)
+        }
         binding.commentsRecyclerView.apply {
             adapter = myAdapter
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)

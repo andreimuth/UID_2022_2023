@@ -42,7 +42,6 @@ class HomeFeedAdapter(private var dataSource: List<Post>, val onItemClick: OnIte
     fun submitList(posts: List<Post>) {
         dataSource = posts
         notifyDataSetChanged()
-
     }
 
     class ViewHolder(binding: FeedItemBinding) : RecyclerView.ViewHolder(binding.root) {
