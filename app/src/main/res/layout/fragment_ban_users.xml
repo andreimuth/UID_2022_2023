@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/toolbar"
-        android:title="Users"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -21,6 +20,16 @@
             android:layout_gravity="start|center_vertical"
             android:layout_width="20dp"
             android:layout_height="20dp"/>
+
+        <TextView
+            android:id="@+id/group_name"
+            android:text="Users"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:padding="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/search_bar"

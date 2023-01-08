@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -54,17 +55,18 @@ class NewPostFragment : Fragment() {
             }
         }
 
+
         binding.postButton.setOnClickListener {
             viewModel.addPost(
                 Post(
-                    if(args.groupId == "1") viewModel.feedPosts.size else viewModel.groups[args.groupId.toInt()].posts.size,
+                    if(args.groupId == "-1") viewModel.feedPosts.size else viewModel.groups[args.groupId.toInt()].posts.size,
                     0,
                     "Username " + viewModel.feedPosts.size,
                     "Date " + viewModel.feedPosts.size,
                     binding.postTextInput.text.toString(),
                     mutableListOf(),
                     Flag.NONE,
-                    PostType.POST,
+                    if(binding.titleToggleButton.text == "New Post") PostType.POST else PostType.ANNOUNCEMENT,
                     args.groupId
                 )
             ).also {   // TODO: CREATE POST BASED ON TYPE
@@ -72,7 +74,21 @@ class NewPostFragment : Fragment() {
             }
         }
         binding.closeButton.setOnClickListener {
-            findNavController().navigateUp()
+            if(binding.postTextInput.text.isNotEmpty()) {
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setTitle("Discard changes?")
+                builder.setPositiveButton("Yes") { dialog, _ ->
+                    dialog.dismiss()
+                    findNavController().navigateUp()
+                }
+                builder.setNegativeButton("No") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                builder.show()
+            } else {
+                findNavController().navigateUp()
+            }
+
         }
     }
 }

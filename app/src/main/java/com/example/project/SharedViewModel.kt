@@ -26,7 +26,7 @@ class SharedViewModel : ViewModel() {
                 )
             }.toMutableList(),
             Flag.NONE,
-            PostType.POST,
+            if(it % 2 == 0) PostType.POST else PostType.ANNOUNCEMENT,
             "-1"
         )
     }.toMutableList()

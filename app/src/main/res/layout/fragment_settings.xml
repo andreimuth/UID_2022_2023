@@ -50,6 +50,5 @@
         app:layout_constraintEnd_toEndOf="@+id/user_type_text_view"
         app:layout_constraintStart_toStartOf="@+id/user_type_text_view"
         app:layout_constraintTop_toBottomOf="@id/user_type_text_view" />
-    />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -35,6 +35,8 @@ class DirectChatFragment : Fragment() {
         if(chats.size == 0) {
             binding.chatEmpty.visibility = View.VISIBLE
         }
+
+        binding.chatUsername.text = args.username
         chats.map { map -> if(map.usernameTo == viewModel.loggedInUser.username)
                                 map.status = ChatStatus.READ }
         initClickListeners()
