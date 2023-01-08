@@ -1,14 +1,16 @@
 package com.example.project
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.project.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedListener {
 
     private lateinit var navController: NavController
     private lateinit var binding: ActivityMainBinding
@@ -19,6 +21,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initBottomNavigation()
+        initListeners()
     }
 
     private fun initBottomNavigation() {
@@ -28,5 +31,21 @@ class MainActivity : AppCompatActivity() {
         val bottomNavView = binding.bottomNavBar
         //take
         bottomNavView.setupWithNavController(navController)
+    }
+
+    private fun initListeners() {
+        navController.addOnDestinationChangedListener(this)
+    }
+
+    override fun onDestinationChanged(
+        controller: NavController,
+        destination: NavDestination,
+        arguments: Bundle?
+    ) {
+        if(destination.id == R.id.login || destination.id == R.id.register) {
+            binding.bottomNavBar.visibility = View.GONE
+        } else {
+            binding.bottomNavBar.visibility = View.VISIBLE
+        }
     }
 }

@@ -1,25 +1,35 @@
 package com.example.project
 
 import ChatsAdapter
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.databinding.FragmentChatsBinding
 import com.example.project.models.Chat
 import com.example.project.models.ChatStatus
+import kotlinx.coroutines.launch
 
 class ChatsFragment: Fragment(), OnItemClick {
 
     private lateinit var binding: FragmentChatsBinding
     private val viewModel: SharedViewModel by activityViewModels()
-    private lateinit var chatsAdapter: ChatsAdapter
+    private val chatsAdapter: ChatsAdapter by lazy {
+        ChatsAdapter(
+            viewModel.chatsFlow.value,
+            viewModel.loggedInUser.username,
+            this
+        )
+    }
     private lateinit var chats: List<Chat>
 
     override fun onCreateView(
@@ -28,7 +38,9 @@ class ChatsFragment: Fragment(), OnItemClick {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentChatsBinding.inflate(inflater, container, false)
+        viewModel.clearChats()
         chats = getLatestChatsPerUser()
+        chats.forEach{ chat -> viewModel.addChatToFlow(chat) }
         initRecyclerView()
         initClickListeners()
         return binding.root
@@ -36,7 +48,7 @@ class ChatsFragment: Fragment(), OnItemClick {
 
     private fun getLatestChatsPerUser(): MutableList<Chat> {
         return viewModel.users.filter {user -> user.username != viewModel.loggedInUser.username}.map { user ->
-            val userChat: List<Chat> = viewModel.chatsFlow.value.filter{ chat ->
+            val userChat: List<Chat> = viewModel.chats.filter{ chat ->
                 (chat.usernameFrom == viewModel.loggedInUser.username && chat.usernameTo == user.username) ||
                     (chat.usernameTo == viewModel.loggedInUser.username && chat.usernameFrom == user.username) }.sortedByDescending{ it.dateSend }
             if(userChat.size == 0) {
@@ -48,7 +60,6 @@ class ChatsFragment: Fragment(), OnItemClick {
     }
 
     private fun initRecyclerView() {
-        chatsAdapter = ChatsAdapter(chats, viewModel.loggedInUser.username, this)
         binding.chatsRecyclerView.apply {
             adapter = chatsAdapter
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
@@ -56,17 +67,33 @@ class ChatsFragment: Fragment(), OnItemClick {
     }
 
     private fun initClickListeners() {
+        lifecycleScope.launch {
+            viewModel.chatsFlow.collect { chats ->
+                chatsAdapter.submitList(chats)
+            }
+        }
+
         binding.searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            @SuppressLint("NotifyDataSetChanged")
             override fun onQueryTextSubmit(p0: String?): Boolean {
-                if (p0 != null) {
-                    viewModel.filterByKeyword(p0)
+                if (p0 != null && p0 != "") {
+                    viewModel.searchUserInChats(p0, chats)
+                } else {
+                    viewModel.clearChats()
+                    chats = getLatestChatsPerUser()
+                    chats.forEach{ chat -> viewModel.addChatToFlow(chat) }
                 }
                 return false
             }
 
+            @SuppressLint("NotifyDataSetChanged")
             override fun onQueryTextChange(p0: String?): Boolean {
-                if (p0 != null) {
-                    viewModel.filterByKeyword(p0)
+                if (p0 != null && p0 != "") {
+                    viewModel.searchUserInChats(p0, chats)
+                } else {
+                    viewModel.clearChats()
+                    chats = getLatestChatsPerUser()
+                    chats.forEach{ chat -> viewModel.addChatToFlow(chat) }
                 }
                 return false
             }
