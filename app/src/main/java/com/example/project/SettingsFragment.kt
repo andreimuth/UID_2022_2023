@@ -32,7 +32,7 @@ class SettingsFragment: Fragment() {
 
     private fun initClickListeners() {
         binding.logoutButton.setOnClickListener {
-            viewModel.loggedInUser = User(-1, -1, "a", "a", UserType.STUDENT)
+            viewModel.loggedInUser = User(-1, -1, "a", "a", UserType.STUDENT, false)
             findNavController().navigate(SettingsFragmentDirections.actionSettingsToLogin())
         }
     }

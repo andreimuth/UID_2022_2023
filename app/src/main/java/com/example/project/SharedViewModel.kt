@@ -47,8 +47,8 @@ class SharedViewModel : ViewModel() {
                                           Chat(4, 1, "george", "andrei", "Hello", "2022-12-24 20:25:26", ChatStatus.SEND),
                                           Chat(5, 1, "george", "admin", "Yo!", "2022-12-23 17:36:35", ChatStatus.SEND)).toMutableList()
 
-    private val chatsStateFlow: MutableStateFlow<List<Chat>> = MutableStateFlow(chats)
-    val chatsFlow = chatsStateFlow.asStateFlow()
+    private val chatsStateFlow: MutableStateFlow<List<Chat>> = MutableStateFlow(emptyList())
+    var chatsFlow = chatsStateFlow.asStateFlow()
 
     var loggedInUser: User = User(-1, -1, "a", "a", UserType.STUDENT, false)
 
@@ -73,8 +73,17 @@ class SharedViewModel : ViewModel() {
     private val usersStateFlow: MutableStateFlow<List<User>> = MutableStateFlow(users)
     val usersFlow = usersStateFlow.asStateFlow()
 
+    fun addChatToFlow(chat: Chat) {
+        chatsStateFlow.value = chatsStateFlow.value + chat
+    }
+
+    fun clearChats() {
+        chatsStateFlow.value = emptyList()
+    }
+
     fun addChat(chat: Chat) {
         chatsStateFlow.value = chatsStateFlow.value + chat
+        chats.add(chat)
     }
 
     fun addUser(user: User) {
@@ -169,6 +178,15 @@ class SharedViewModel : ViewModel() {
         usersStateFlow.value = users.filter { user ->
             user.username.contains(keyword)
         }.toMutableList()
+    }
+
+    fun searchUserInChats(keyword: String, chats: List<Chat>){
+        chatsStateFlow.value = chats.filter { chat ->
+            if(loggedInUser.username == chat.usernameFrom) {
+                chat.usernameTo.contains(keyword)
+            }
+            chat.usernameFrom.contains(keyword)
+         }.toMutableList()
     }
 
 }

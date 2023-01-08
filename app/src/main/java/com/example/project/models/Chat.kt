@@ -7,5 +7,5 @@ data class Chat(
     val usernameFrom: String,
     val text: String,
     val dateSend: String,
-    val status: ChatStatus
+    var status: ChatStatus
 )

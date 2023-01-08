@@ -31,7 +31,11 @@ class DirectChatFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentDirectChatBinding.inflate(inflater, container, false)
-        chats = getLatestChatsPerUser()
+        chats = getLatestChats()
+        if(chats.size == 0) {
+            binding.chatEmpty.visibility = View.VISIBLE
+        }
+        chats.map { map -> map.status = ChatStatus.READ }
         initClickListeners()
         initRecyclerView()
         return binding.root
@@ -41,14 +45,14 @@ class DirectChatFragment : Fragment() {
         chatsAdapter = DirectChatAdapter(chats, viewModel.loggedInUser.username)
         binding.chatsRecyclerView.apply {
             adapter = chatsAdapter
-            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, true)
         }
     }
 
-    private fun getLatestChatsPerUser(): MutableList<Chat> {
+    private fun getLatestChats(): MutableList<Chat> {
         return viewModel.chatsFlow.value.filter{ chat ->
             (chat.usernameFrom == viewModel.loggedInUser.username && chat.usernameTo == args.username) ||
-                    (chat.usernameTo == viewModel.loggedInUser.username && chat.usernameFrom == args.username) }.sortedByDescending{ it.dateSend }.toMutableList()
+                    (chat.usernameTo == viewModel.loggedInUser.username && chat.usernameFrom == args.username) && chat.id != -1 }.sortedByDescending{ it.dateSend }.toMutableList()
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -56,6 +60,7 @@ class DirectChatFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.postCommentButton.setOnClickListener{
+            binding.chatEmpty.visibility = View.INVISIBLE
             val comment = binding.messageInputText.text.toString()
             val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
             val currentDateAndTime = sdf.format(Date())

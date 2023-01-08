@@ -72,7 +72,8 @@ class RegisterFragment : Fragment() {
                                 1,
                                 binding.registerUsernameTextInput.text.toString(),
                                 binding.registerPasswordTextInput.text.toString(),
-                                userType
+                                userType,
+                                false
                             )
                         )
                         findNavController().navigate(RegisterFragmentDirections.actionRegisterToLogin())

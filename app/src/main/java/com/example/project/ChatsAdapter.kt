@@ -1,4 +1,5 @@
 import android.annotation.SuppressLint
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +10,10 @@ import com.example.project.OnItemClick
 import com.example.project.R
 import com.example.project.databinding.ChatItemBinding
 import com.example.project.models.Chat
+import com.example.project.models.ChatStatus
+import com.example.project.models.Post
 
-class ChatsAdapter(private val dataSource: List<Chat>, private val usernameLoggedIn: String, val onItemClick: OnItemClick) :
+class ChatsAdapter(private var dataSource: List<Chat>, private val usernameLoggedIn: String, val onItemClick: OnItemClick) :
     RecyclerView.Adapter<ChatsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -31,9 +34,19 @@ class ChatsAdapter(private val dataSource: List<Chat>, private val usernameLogge
         } else {
             holder.username.text = dataSource[position].usernameFrom
             holder.text.text = dataSource[position].text
+            if(dataSource[position].status == ChatStatus.SEND) {
+                holder.text.setTypeface(null, Typeface.BOLD_ITALIC);
+            } else {
+                holder.text.setTypeface(null, Typeface.NORMAL);
+            }
         }
 
         holder.date.text = dataSource[position].dateSend
+    }
+
+    fun submitList(posts: List<Chat>) {
+        dataSource = posts
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {

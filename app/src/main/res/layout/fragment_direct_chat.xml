@@ -31,6 +31,21 @@
             android:textStyle="bold" />
     </Toolbar>
 
+    <TextView
+        android:id="@+id/chat_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="316dp"
+        android:padding="10dp"
+        android:text="@string/start_a_conversation_by_sending_a_message"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:textStyle="italic"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatsRecyclerView"
         android:layout_width="match_parent"
@@ -39,6 +54,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toTopOf="@id/message_input"
         tools:listitem="@layout/direct_chat_item_1"/>
 
     <androidx.cardview.widget.CardView
