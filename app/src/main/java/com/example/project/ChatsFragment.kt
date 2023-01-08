@@ -101,7 +101,7 @@ class ChatsFragment: Fragment(), OnItemClick {
     }
 
     override fun onItemClick(position: Int, v: View,v2: View?) {
-        val selectedChat = chats[position]
+        val selectedChat = viewModel.chatsFlow.value[position]
         var selectedUsername = selectedChat.usernameFrom
         if(selectedChat.usernameFrom == viewModel.loggedInUser.username) {
             selectedUsername = chats[position].usernameTo
