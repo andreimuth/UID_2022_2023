@@ -35,7 +35,8 @@ class DirectChatFragment : Fragment() {
         if(chats.size == 0) {
             binding.chatEmpty.visibility = View.VISIBLE
         }
-        chats.map { map -> map.status = ChatStatus.READ }
+        chats.map { map -> if(map.usernameTo == viewModel.loggedInUser.username)
+                                map.status = ChatStatus.READ }
         initClickListeners()
         initRecyclerView()
         return binding.root
