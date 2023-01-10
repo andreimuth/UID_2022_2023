@@ -1,6 +1,7 @@
 package com.example.project
 
 import android.annotation.SuppressLint
+import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,7 @@ import com.example.project.models.Flag
 import com.example.project.models.Post
 import com.example.project.models.PostType
 import com.example.project.models.UserType
+import java.util.*
 
 class NewPostFragment : Fragment() {
 
@@ -43,7 +45,7 @@ class NewPostFragment : Fragment() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "SimpleDateFormat")
     private fun initClickListeners() {
         if(viewModel.loggedInUser.type == UserType.ACADEMIC) {
             binding.titleToggleButton.setOnClickListener {
@@ -57,12 +59,14 @@ class NewPostFragment : Fragment() {
 
 
         binding.postButton.setOnClickListener {
+            val sdf = SimpleDateFormat("yyyy-MM-dd")
+            val currentDateAndTime = sdf.format(Date())
             viewModel.addPost(
                 Post(
                     if(args.groupId == "-1") viewModel.feedPosts.size else viewModel.groups[args.groupId.toInt()].posts.size,
                     0,
-                    "Username " + viewModel.feedPosts.size,
-                    "Date " + viewModel.feedPosts.size,
+                    viewModel.loggedInUser.username,
+                    currentDateAndTime,
                     binding.postTextInput.text.toString(),
                     mutableListOf(),
                     Flag.NONE,

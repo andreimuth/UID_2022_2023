@@ -34,8 +34,12 @@ class LoginFragment : Fragment() {
                                     user.password == binding.loginPasswordTextInput.text.toString()}
 
             if(user != null) {
-                viewModel.loggedInUser = user
-                findNavController().navigate(LoginFragmentDirections.actionLoginToHome())
+                if(!user.isBanned) {
+                    viewModel.loggedInUser = user
+                    findNavController().navigate(LoginFragmentDirections.actionLoginToHome())
+                } else {
+                    binding.loginError.text = "This user has been banned!"
+                }
             } else {
                 binding.loginError.text = "The username or password is incorrect!"
             }
